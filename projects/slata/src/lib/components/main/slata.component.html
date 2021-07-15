@@ -1,0 +1,25 @@
+<mat-form-field appearance="fill">
+  <mat-select [(value)]="selectedLanguageKey" #lang (selectionChange)="getTranslationByLanguage(lang.value)">
+    <mat-select-trigger>
+      <img *ngIf="isIcon" [src]="getLanguageImage(lang.value)"
+           [ngStyle]="{
+        'width': iconSize + 'px',
+        'height': iconSize + 'px',
+        'object-fit': 'cover', 'margin': '0 1rem 0 0', 'border-radius': '50%'}"  alt="">
+      <span>{{getLanguageName(lang.value)}}</span>
+
+    </mat-select-trigger>
+
+    <mat-option *ngFor="let language of languages" [value]="language.key">
+      <img *ngIf="isIcon" [src]="getLanguageImage(language.key)"
+       [ngStyle]="{
+        'width': iconSize + 'px',
+        'height': iconSize + 'px',
+        'object-fit': 'cover', 'margin': '0 1rem 0 0', 'border-radius': '50%'}"  alt="">
+      <span>{{getLanguageName(language.key)}}</span>
+
+      <span *ngIf="getLanguageCountry(language.key)"> ({{getLanguageCountry(language.key)}})</span>
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+

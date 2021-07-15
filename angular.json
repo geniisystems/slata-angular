@@ -1,0 +1,39 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "slata": {
+      "projectType": "library",
+      "root": "projects/slata",
+      "sourceRoot": "projects/slata/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/slata/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/slata/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/slata/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/slata/src/test.ts",
+            "tsConfig": "projects/slata/tsconfig.spec.json",
+            "karmaConfig": "projects/slata/karma.conf.js"
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "slata"
+}
