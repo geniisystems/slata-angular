@@ -23,7 +23,7 @@ import { SlataModule } from "slata";
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    // Import SlataModule
+    // Import here
     //
     SlataModule.forRoot(CONFIG),
   ],
