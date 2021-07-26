@@ -24,7 +24,7 @@ export class SlataService {
     const type = `BACKEND_URL_${this.config.backendType}`;
     // @ts-ignore
     const apiURL = environment[type]
-    return this.http.get<IProjectDetails>(`${apiURL}public-api/projects`, {
+    return this.http.get<IProjectDetails>(`${apiURL}public/projects`, {
       headers: new HttpHeaders().set('projectToken', this.config.projectToken)
     });
   }
@@ -33,7 +33,7 @@ export class SlataService {
     const type = `BACKEND_URL_${this.config.backendType}`;
     // @ts-ignore
     const apiURL = environment[type]
-    return this.http.get<any>(`${apiURL}public-api/projects/translations`, {
+    return this.http.get<any>(`${apiURL}public/projects/translations`, {
       params: new HttpParams().set('language', languageName),
       headers: new HttpHeaders().set('projectToken', this.config.projectToken),
       observe: 'response'
