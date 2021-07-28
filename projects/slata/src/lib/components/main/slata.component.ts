@@ -30,6 +30,7 @@ export class SlataComponent implements OnInit {
           if(data.languages.length > 0) {
             this.selectedLanguageKey = data.languages[0].key;
             this.getCurrentUserLanguageKey();
+            this.getTranslationByLanguage(this.selectedLanguageKey);
           }
         }
       }, err => {
@@ -67,14 +68,13 @@ export class SlataComponent implements OnInit {
   }
 
   getTranslationByLanguage(languageName: string): void {
-    console.log(languageName)
     if (languageName) {
       this.translationService.getTranslationByLanguage(languageName).subscribe(
         data => {
           if(data) {
-            console.log(data);
             this.saveLanguagesToLocalStorage(data.body.translations);
             this.translationService.allTranslation$.next(data.body.translations);
+            this.getData();
           }
         }
       );
@@ -90,5 +90,58 @@ export class SlataComponent implements OnInit {
     }
     this.translationService.translationKeyArray = translations;
     localStorage.setItem('slataTranslations', JSON.stringify(project));
+  }
+
+  getData(): void {
+    const w = window as any;
+    setTimeout(() => {
+      let allKey: any[] = [];
+      w.webpackJsonp.forEach((el: any) => {
+        for (const key in el[1]) {
+          let startFindIndex = 0;
+          while (true) {
+            const indexOfSearch = el[1][key].toString().indexOf('property"]("fullKey", "', startFindIndex);
+            if (indexOfSearch === -1) { break; }
+            const indexOfEnd = el[1][key].toString().indexOf('"', indexOfSearch + 23);
+            const keyName = el[1][key].toString().slice(indexOfSearch + 23, indexOfEnd);
+            let keyValue: any = '';
+            const indexOfDefaultValue = el[1][key].toString().indexOf('defaultValue', indexOfEnd);
+            if (indexOfDefaultValue === -1 || indexOfDefaultValue > indexOfEnd + 15)  {
+              keyValue = null;
+            } else {
+              const indexOfEndDefaultValue = el[1][key].toString().indexOf('\"\);', indexOfDefaultValue + 16);
+              keyValue = el[1][key].toString().slice(indexOfDefaultValue + 16, indexOfEndDefaultValue);
+            }
+            startFindIndex = indexOfEnd + 1;
+            allKey.push({
+              fullKey: keyName,
+              defaultValue: keyValue
+            });
+            allKey = allKey.filter(kk => !kk.fullKey.startsWith(`'`));
+          }
+        }
+      });
+      let newKey: any[] = [];
+      if (localStorage.getItem('slataTranslations')){
+        const slataTranslations: Array<any> = JSON.parse(<string>localStorage.getItem('slataTranslations')).translations;
+        allKey.forEach(elem => {
+          if (!slataTranslations.some(slata => slata.key === elem.fullKey)){
+            newKey.push(elem);
+          }
+          newKey = newKey.filter(key => key.defaultValue);
+        });
+      }
+      if(newKey && newKey.length > 0) {
+        this.translationService.sendNewKey(newKey).subscribe(
+            () => {
+              this.getTranslationByLanguage(this.selectedLanguageKey);
+            }, err => {
+              console.log(err);
+            }
+        )
+      } else {
+        this.getData();
+      }
+    }, 5000);
   }
 }

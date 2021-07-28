@@ -56,4 +56,13 @@ export class SlataService {
     }
     return '';
   }
+
+  sendNewKey(key: Array<any>): Observable<HttpResponse<any>> {
+    const type = `BACKEND_URL_${this.config.backendType}`;
+    // @ts-ignore
+    const apiURL = environment[type]
+    return this.http.post<any>(`${apiURL}public/projects/translations`, { keys: key }, {
+      headers: new HttpHeaders().set('projectToken', this.config.projectToken),
+    });
+  }
 }
