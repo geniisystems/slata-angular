@@ -1,11 +1,12 @@
 import { Directive, ElementRef, Input, OnInit } from '@angular/core';
-import { SlataService } from "../../slata.service";
+import { SlataService } from '../../slata.service';
 
 @Directive({
   selector: '[libTranslationKey]'
 })
 export class TranslationKeyDirective implements OnInit{
   @Input() fullKey: string = '';
+  @Input() defaultValue: string = '';
   savedTextContent: string = '';
 
 
@@ -30,7 +31,7 @@ export class TranslationKeyDirective implements OnInit{
             if(namespace && namespace.value) {
               this.elementRef.nativeElement.textContent = namespace.value
             } else {
-              this.elementRef.nativeElement.textContent = this.savedTextContent;
+              this.elementRef.nativeElement.textContent = this.defaultValue ? this.defaultValue : this.savedTextContent;
             }
           }
         }
@@ -47,7 +48,7 @@ export class TranslationKeyDirective implements OnInit{
         if(namespace && namespace.value) {
           this.elementRef.nativeElement.textContent = namespace.value
         } else {
-          this.elementRef.nativeElement.textContent = this.savedTextContent;
+          this.elementRef.nativeElement.textContent = this.defaultValue ? this.defaultValue : this.savedTextContent;
         }
       }
     }

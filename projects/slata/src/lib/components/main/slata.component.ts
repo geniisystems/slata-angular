@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import { IProjectLanguages } from "../../interfaces/language.interface";
-import { SlataService } from "../../slata.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { IProjectLanguages } from '../../interfaces/language.interface';
+import { SlataService } from '../../slata.service';
 
 @Component({
   selector: 'lib-slata',
@@ -20,7 +20,6 @@ export class SlataComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProjectDetails();
-    // this.getCurrentUserLanguageKey();
   }
 
   loadProjectDetails(): void {

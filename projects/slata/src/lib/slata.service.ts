@@ -1,10 +1,10 @@
-import {Inject, Injectable} from '@angular/core';
-import {Observable, Subject} from "rxjs";
-import {CONFIG} from "./slata.module";
-import {IProjectConfig} from "./interfaces/project-config.interface";
-import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from "@angular/common/http";
-import {IProjectDetails} from "./interfaces/project-details.interface";
-import {environment} from "./constants/environment";
+import { Inject, Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { CONFIG } from './slata.module';
+import { IProjectConfig } from "./interfaces/project-config.interface";
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import { IProjectDetails } from './interfaces/project-details.interface';
+import { environment } from "./constants/environment";
 
 @Injectable({
   providedIn: 'root'

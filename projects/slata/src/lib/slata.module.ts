@@ -3,12 +3,10 @@ import { SlataComponent } from './components/main/slata.component';
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { IProjectConfig } from './interfaces/project-config.interface';
-// import { LanguageService } from "./services/language/language.service";
-// import { TranslationService } from "./services/translation/translation.service";
 import { TranslationKeyDirective } from './directives/translation-key/translation-key.directive';
 import { SlataService } from "./slata.service";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatSelectModule} from "@angular/material/select";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -24,23 +22,17 @@ import {MatSelectModule} from "@angular/material/select";
   exports: [
     SlataComponent,
     TranslationKeyDirective
-  ],
-  // providers: [TranslationService, LanguageService]
+  ]
 })
 export class SlataModule {
 
-  constructor(
-    // public languageService: LanguageService,
-    // public translationService: TranslationService
-  ) { }
+  constructor() { }
 
   static forRoot(config?: IProjectConfig): ModuleWithProviders<any> {
     return {
       ngModule: SlataModule,
       providers: [
         SlataService,
-        // LanguageService,
-        // TranslationService,
         { provide: CONFIG, useValue: config }
       ]
     };
