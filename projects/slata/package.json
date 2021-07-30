@@ -1,13 +1,11 @@
 {
   "name": "slata",
-  "version": "0.0.58",
+  "version": "0.0.59",
   "peerDependencies": {
     "@angular/common": "^11.1.2",
-    "@angular/core": "^11.1.2",
-    "@angular/material": "^11.2.13"
+    "@angular/core": "^11.1.2"
   },
   "dependencies": {
-    "tslib": "^2.0.0",
-    "@angular/material": "^11.2.13"
+    "tslib": "^2.0.0"
   }
 }
