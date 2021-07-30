@@ -144,12 +144,15 @@ export class SlataComponent implements OnInit {
         this.translationService.sendNewKey(correctNewKey).subscribe(
             () => {
               this.getTranslationByLanguage(this.selectedLanguageKey);
-              this.printInfoSuccessPush(correctNewKey, badNewKey);
+              this.printInfoSuccessPush(correctNewKey);
             }, err => {
               console.log(err);
             }
         )
       } else {
+        if (badNewKey && badNewKey.length > 0) {
+          this.printInfoBadNewKey(badNewKey);
+        }
         this.getData();
       }
     }, 5000);
@@ -160,7 +163,7 @@ export class SlataComponent implements OnInit {
     return unescape(str.replace(regExp, (match: any, grp: string) => String.fromCharCode(parseInt(grp, 16))));
   }
 
-  private printInfoSuccessPush(newKey?: any[], badKey?: any[]): void {
+  private printInfoSuccessPush(newKey?: any[]): void {
     if (newKey && newKey.length > 0) {
       console.log('%c================================================================================', 'color:green');
       console.log('%cPushed new key successfully', 'color:green');
@@ -169,6 +172,9 @@ export class SlataComponent implements OnInit {
       });
       console.log('%c================================================================================', 'color:green');
     }
+  }
+
+  private printInfoBadNewKey(badKey?: any[]): void {
     if (badKey && badKey.length > 0) {
       console.log('%c================================================================================', 'color:red');
       console.log('%cPushed new key failed', 'color:red');
