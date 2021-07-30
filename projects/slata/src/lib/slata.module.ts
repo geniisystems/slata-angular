@@ -28,7 +28,16 @@ export class SlataModule {
 
   constructor() { }
 
-  static forRoot(config?: IProjectConfig): ModuleWithProviders<any> {
+  static forRoot(config: IProjectConfig): ModuleWithProviders<any> {
+
+    if(!config.developMode){
+      config.developMode = false
+    }
+
+    if(!config.backendType){
+      config.backendType = 'PRODUCTION';
+    }
+
     return {
       ngModule: SlataModule,
       providers: [

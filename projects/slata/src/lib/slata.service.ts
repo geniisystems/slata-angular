@@ -67,6 +67,6 @@ export class SlataService {
   }
 
   get isDevMode(): boolean {
-    return this.config.developMode;
+    return this.config.developMode || false;
   }
 }
