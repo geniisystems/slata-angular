@@ -74,7 +74,7 @@ export class SlataComponent implements OnInit {
           if(data) {
             this.saveLanguagesToLocalStorage(data.body.translations);
             this.translationService.allTranslation$.next(data.body.translations);
-            this.getData();
+            this.translationService.isDevMode ? this.getData() : null;
           }
         }
       );
@@ -92,7 +92,7 @@ export class SlataComponent implements OnInit {
     localStorage.setItem('slataTranslations', JSON.stringify(project));
   }
 
-  getData(): void {
+  private getData(): void {
     const w = window as any;
     setTimeout(() => {
       let allKey: any[] = [];
@@ -100,41 +100,51 @@ export class SlataComponent implements OnInit {
         for (const key in el[1]) {
           let startFindIndex = 0;
           while (true) {
-            const indexOfSearch = el[1][key].toString().indexOf('property"]("fullKey", "', startFindIndex);
+            const indexOfSearch = el[1][key].toString().indexOf('ɵɵproperty"]("', startFindIndex);
             if (indexOfSearch === -1) { break; }
-            const indexOfEnd = el[1][key].toString().indexOf('"', indexOfSearch + 23);
-            const keyName = el[1][key].toString().slice(indexOfSearch + 23, indexOfEnd);
-            let keyValue: any = '';
-            const indexOfDefaultValue = el[1][key].toString().indexOf('defaultValue', indexOfEnd);
-            if (indexOfDefaultValue === -1 || indexOfDefaultValue > indexOfEnd + 15)  {
-              keyValue = null;
-            } else {
-              const indexOfEndDefaultValue = el[1][key].toString().indexOf('\"\);', indexOfDefaultValue + 16);
-              keyValue = el[1][key].toString().slice(indexOfDefaultValue + 16, indexOfEndDefaultValue);
-            }
+            const indexOfEnd = el[1][key].toString().indexOf(');', indexOfSearch + 13);
+            const keyName = el[1][key].toString().slice(indexOfSearch + 13, indexOfEnd);
             startFindIndex = indexOfEnd + 1;
-            allKey.push({
-              fullKey: keyName,
-              defaultValue: keyValue
-            });
-            allKey = allKey.filter(kk => !kk.fullKey.startsWith(`'`));
+            allKey.push(keyName);
+            allKey = allKey.filter(str => str.includes('fullKey') && str.includes('defaultValue'));
           }
         }
       });
-      let newKey: any[] = [];
+      const regExp = /(?<fullKey>fullKey",\s"[^"]+)|(?<defaultValue>defaultValue",\s"[^"]+)/gmu;
+      const newAllKey: any[] = [];
+      allKey.forEach(elem => {
+        const arrPropAndVal: any[] = [];
+        elem.match(regExp).forEach((some: string) => {
+          const afterSplit =  some.split('", "');
+          arrPropAndVal.push(afterSplit);
+        });
+        const entries = new Map(arrPropAndVal);
+        // @ts-ignore
+        const obj = Object.fromEntries(entries);
+        newAllKey.push(obj);
+      });
+      newAllKey.map(elem => {
+        elem.defaultValue = this.decodeUnicode(elem.defaultValue);
+        return elem;
+      });
+      let correctNewKey: any[] = [];
+      let badNewKey: any[] = [];
+      const keyRegExp = /^[a-z0-9_]+\.[a-z0-9_]+(?:\.[a-z0-9_]+)*$/;
       if (localStorage.getItem('slataTranslations')){
         const slataTranslations: Array<any> = JSON.parse(<string>localStorage.getItem('slataTranslations')).translations;
-        allKey.forEach(elem => {
+        newAllKey.forEach(elem => {
           if (!slataTranslations.some(slata => slata.key === elem.fullKey)){
-            newKey.push(elem);
+            correctNewKey.push(elem);
           }
-          newKey = newKey.filter(key => key.defaultValue);
+          badNewKey = correctNewKey.filter(key => !keyRegExp.test(key.fullKey));
+          correctNewKey = correctNewKey.filter(key => key.defaultValue && keyRegExp.test(elem.fullKey));
         });
       }
-      if(newKey && newKey.length > 0) {
-        this.translationService.sendNewKey(newKey).subscribe(
+      if(correctNewKey && correctNewKey.length > 0) {
+        this.translationService.sendNewKey(correctNewKey).subscribe(
             () => {
               this.getTranslationByLanguage(this.selectedLanguageKey);
+              this.printInfoSuccessPush(correctNewKey, badNewKey);
             }, err => {
               console.log(err);
             }
@@ -143,5 +153,30 @@ export class SlataComponent implements OnInit {
         this.getData();
       }
     }, 5000);
+  }
+
+  private decodeUnicode(str: string): string {
+    const regExp = /\\u([\d\w]{4})/gi;
+    return unescape(str.replace(regExp, (match: any, grp: string) => String.fromCharCode(parseInt(grp, 16))));
+  }
+
+  private printInfoSuccessPush(newKey?: any[], badKey?: any[]): void {
+    if (newKey && newKey.length > 0) {
+      console.log('%c================================================================================', 'color:green');
+      console.log('%cPushed new key successfully', 'color:green');
+      newKey.forEach(elem => {
+        console.log(`fullKey: ${elem.fullKey} =>`, `defaultValue: ${elem.defaultValue.length > 40 ? elem.defaultValue.slice(0, 40).concat('...') : elem.defaultValue}` );
+      });
+      console.log('%c================================================================================', 'color:green');
+    }
+    if (badKey && badKey.length > 0) {
+      console.log('%c================================================================================', 'color:red');
+      console.log('%cPushed new key failed', 'color:red');
+      badKey.forEach(elem => {
+        console.log(`fullKey: ${elem.fullKey}`);
+      });
+      console.log('%cInvalid "fullKey" property. Full key must contains only dots and underscore', 'color:red');
+      console.log('%c================================================================================', 'color:red');
+    }
   }
 }

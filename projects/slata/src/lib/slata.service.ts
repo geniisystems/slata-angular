@@ -65,4 +65,8 @@ export class SlataService {
       headers: new HttpHeaders().set('projectToken', this.config.projectToken),
     });
   }
+
+  get isDevMode(): boolean {
+    return this.config.developMode;
+  }
 }
