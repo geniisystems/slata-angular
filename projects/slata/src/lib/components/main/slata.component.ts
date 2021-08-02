@@ -96,7 +96,18 @@ export class SlataComponent implements OnInit {
     const w = window as any;
     setTimeout(() => {
       let allKey: any[] = [];
-      w.webpackJsonp.forEach((el: any) => {
+      let arrFunctions: any;
+      if(w.webpackJsonp){
+        arrFunctions = w.webpackJsonp;
+      }
+      else {
+        for (const key in window) {
+          if(key.includes('webpackChunk')){
+            arrFunctions = window[key] as any;
+          }
+        }
+      }
+      arrFunctions.forEach((el: any) => {
         for (const key in el[1]) {
           let startFindIndex = 0;
           while (true) {
