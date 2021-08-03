@@ -54,6 +54,10 @@ export class SlataService {
     if(namespace && namespace.value) {
       return  namespace.value
     }
+    else {
+      const key = [ { fullKey: keyName, defaultValue: "default value" } ];
+      this.sendNewKey(key);
+    }
     return '';
   }
 
