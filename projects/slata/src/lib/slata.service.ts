@@ -40,7 +40,7 @@ export class SlataService {
     });
   }
 
-  getTranslationByKey(keyName: string): string {
+  getTranslationByKey(keyName: string, defaultValue: string): string {
 
     if (localStorage.length > 0 &&  localStorage.getItem('slataTranslations')) {
       const locale = localStorage.getItem('slataTranslations')
@@ -52,13 +52,13 @@ export class SlataService {
     const namespace = this.translationKeyArray.find((elem: { key: string; }) => elem.key === keyName);
 
     if(namespace && namespace.value) {
-      return  namespace.value
+      return namespace.value
     }
     else {
-      const key = [ { fullKey: keyName, defaultValue: "default value" } ];
+      const key = [ { fullKey: keyName, defaultValue: defaultValue } ];
       this.sendNewKey(key);
     }
-    return '';
+    return defaultValue;
   }
 
   sendNewKey(key: Array<any>): Observable<HttpResponse<any>> {
