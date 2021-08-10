@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { IProjectLanguages } from '../../interfaces/language.interface';
 import { SlataService } from '../../slata.service';
 
@@ -13,6 +13,13 @@ export class SlataComponent implements OnInit {
   @Input() public iconSize: number = 20;
   languages: Array<IProjectLanguages> = [];
   selectedLanguageKey: string = '';
+  isOpen = false;
+  @HostListener('window:mouseup', ['$event'])
+  handle(event: any): void {
+    if(!event.target.dataset.selectValue && !event.target.closest('.language')){
+      this.isOpen = !this.isOpen;
+    }
+  }
 
   constructor(
     private translationService: SlataService
@@ -90,6 +97,18 @@ export class SlataComponent implements OnInit {
     }
     this.translationService.translationKeyArray = translations;
     localStorage.setItem('slataTranslations', JSON.stringify(project));
+  }
+
+  openDropdown(): void {
+    this.isOpen = !this.isOpen;
+  }
+
+  selectOption(event: any): void {
+    if(event.target.dataset.selectValue && event.target.dataset.selectValue !== this.selectedLanguageKey){
+      this.getTranslationByLanguage(event.target.dataset.selectValue);
+      this.selectedLanguageKey = event.target.dataset.selectValue;
+      this.isOpen = !this.isOpen;
+    }
   }
 
   private getData(): void {

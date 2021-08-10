@@ -1,0 +1,93 @@
+.language {
+    position: relative;
+}
+
+.language_default_select {
+    display: none;
+}
+
+.language_select {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    color: #555;
+}
+
+.language_select .language_value {
+    float: left;
+    padding: 5px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+.language_select .language_arrow {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    background-image: url(https://www.jqueryscript.net/demo/Select-Option-Icons-customSelect/images/arrow_down.png);
+    background-size: 40%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.language_select .language_arrow.rotated {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.language_options {
+    display: none;
+}
+
+.language_option {
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.language_option:hover {
+    background-color: rgba(0,0,0,.12);
+}
+
+.language_options_wrapper_outside {
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 16px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.language_options_wrapper_outside:hover {
+    background: rgba(0,0,0,.04);
+    cursor: pointer;
+}
+
+.language_options_wrapper_inside {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.language_options_selected {
+    background: #e0e0e0 !important;
+}
+
+.open {
+    display: block;
+    position: absolute;
+    width: max-content;
+    right: 0;
+    top: 0;
+    background: #fff;
+    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+    border-radius: 4px
+}

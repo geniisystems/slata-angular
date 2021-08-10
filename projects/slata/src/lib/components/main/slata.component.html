@@ -1,25 +1,33 @@
-<mat-form-field appearance="fill">
-  <mat-select [(value)]="selectedLanguageKey" #lang (selectionChange)="getTranslationByLanguage(lang.value)">
-    <mat-select-trigger>
-      <img *ngIf="isIcon" [src]="getLanguageImage(lang.value)"
-           [ngStyle]="{
-        'width': iconSize + 'px',
-        'height': iconSize + 'px',
-        'object-fit': 'cover', 'margin': '0 1rem 0 0', 'border-radius': '50%'}"  alt="">
-      <span>{{getLanguageName(lang.value)}}</span>
-
-    </mat-select-trigger>
-
-    <mat-option *ngFor="let language of languages" [value]="language.key">
-      <img *ngIf="isIcon" [src]="getLanguageImage(language.key)"
-       [ngStyle]="{
-        'width': iconSize + 'px',
-        'height': iconSize + 'px',
-        'object-fit': 'cover', 'margin': '0 1rem 0 0', 'border-radius': '50%'}"  alt="">
-      <span>{{getLanguageName(language.key)}}</span>
-
-      <span *ngIf="getLanguageCountry(language.key)"> ({{getLanguageCountry(language.key)}})</span>
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-
+<div class="language">
+  <div class="language_select" (click)="openDropdown()">
+    <div class="language_value">
+      <div *ngIf="isIcon" class="language_option"
+           [attr.data-select-value]="selectedLanguageKey"
+           [ngStyle]="{'background-image': 'url(' + getLanguageImage(selectedLanguageKey) + ')','width': iconSize + 'px',
+                 'height': iconSize + 'px','margin': '0 1rem 0 0', 'border-radius': '50%'}">
+      </div>
+      <span>{{getLanguageName(selectedLanguageKey)}}</span>
+    </div>
+    <div class="language_arrow" style="width: 35px;" [ngClass]="{'rotated': isOpen}"></div>
+  </div>
+  <div class="language_options" [ngClass]="{'open': isOpen}">
+    <div *ngFor="let lang of languages"
+         (click)="selectOption($event)"
+         class="language_options_wrapper_outside"
+         [ngClass]="{'language_options_selected': lang.key === selectedLanguageKey}"
+         [attr.data-select-value]="lang.key">
+      <div class="language_options_wrapper_inside" [attr.data-select-value]="lang.key">
+        <div *ngIf="isIcon" class="language_option"
+             [attr.data-select-value]="lang.key"
+             [ngStyle]="{'background-image': 'url(' + getLanguageImage(lang.key) + ')','width': iconSize + 'px',
+                     'height': iconSize + 'px','margin': '0 1rem 0 0', 'border-radius': '50%'}"></div>
+        <ng-container *ngIf="!getLanguageCountry(lang.key); else country">
+          {{getLanguageName(lang.key)}}
+        </ng-container>
+        <ng-template #country>
+          {{getLanguageName(lang.key)}} ({{getLanguageCountry(lang.key)}})
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
