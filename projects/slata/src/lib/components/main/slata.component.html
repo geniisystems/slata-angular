@@ -8,7 +8,9 @@
       </div>
       <span>{{getLanguageName(selectedLanguageKey)}}</span>
     </div>
-    <div class="language_arrow" style="width: 35px;" [ngClass]="{'rotated': isOpen}"></div>
+    <div class="language_arrow-wrapper">
+      <div class="language_arrow"></div>
+    </div>
   </div>
   <div class="language_options" [ngClass]="{'open': isOpen}">
     <div *ngFor="let lang of languages"

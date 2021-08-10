@@ -11,30 +11,38 @@
     cursor: pointer;
     overflow: hidden;
     color: #555;
+    display: flex;
+    align-items: center;
 }
 
 .language_select .language_value {
-    float: left;
-    padding: 5px;
+    padding: 5px 35px 5px 5px;
     width: 100%;
     display: flex;
     align-items: center;
     text-transform: uppercase;
 }
 
-.language_select .language_arrow {
-    position: absolute;
-    right: 0;
-    height: 100%;
-    background-image: url(https://www.jqueryscript.net/demo/Select-Option-Icons-customSelect/images/arrow_down.png);
-    background-size: 40%;
-    background-repeat: no-repeat;
-    background-position: center center;
+.language_arrow-wrapper {
+    position: relative;
+    top: -4px;
+    right: 10px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-right: 1.5px solid #545553;
+    border-top: 1.5px solid #545553;
+    transform: rotate(135deg);
+    margin-right: 15px;
+    vertical-align: middle;
 }
 
-.language_select .language_arrow.rotated {
-    -webkit-transform: rotate(180deg);
-    transform: rotate(180deg);
+.language_arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    margin: 0 4px;
+    color: rgba(0,0,0,.54);
 }
 
 .language_options {
