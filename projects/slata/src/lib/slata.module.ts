@@ -5,8 +5,6 @@ import { FormsModule } from "@angular/forms";
 import { IProjectConfig } from './interfaces/project-config.interface';
 import { TranslationKeyDirective } from './directives/translation-key/translation-key.directive';
 import { SlataService } from "./slata.service";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -15,9 +13,7 @@ import { MatSelectModule } from "@angular/material/select";
   ],
   imports: [
     CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatSelectModule
+    FormsModule
   ],
   exports: [
     SlataComponent,
