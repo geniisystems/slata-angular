@@ -16,7 +16,7 @@ export class SlataComponent implements OnInit {
   isOpen = false;
   @HostListener('window:mouseup', ['$event'])
   handle(event: any): void {
-    if(!event.target.dataset.selectValue && !event.target.closest('.language')){
+    if(!event.target.dataset.selectValue && !event.target.closest('.language') && this.isOpen){
       this.isOpen = !this.isOpen;
     }
   }
