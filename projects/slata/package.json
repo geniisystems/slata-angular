@@ -1,6 +1,6 @@
 {
   "name": "slata",
-  "version": "0.0.63",
+  "version": "0.0.64",
   "peerDependencies": {
     "@angular/common": "^11.1.2",
     "@angular/core": "^11.1.2"
