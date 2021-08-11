@@ -1,4 +1,4 @@
-# slata-angular
+# Slata-angular
 Angular plugin for the Slata online translation platform
 
 ## Installation
@@ -11,57 +11,61 @@ npm install slata
 
 ## Usage
 
-```python
+### Add Slata config to environments variable
+Open `/src/environments/environment.ts` and add your Slata configuration. You can find your project token in [slata.io](https://slata.io/).
+
+```ts
+export const environment = {
+    production: false,
+    slataConfig: {
+        projectToken: '<your-project-token>',
+        developMode: true | false
+    }
+};
+```
+Set `developMode: true` to push new key in slata online translation platform.
+
+### Setup `@NgModule` for the `SlataModule`
+
+```ts
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
 import { AppComponent } from "./app.component";
 
-import { SlataModule } from "slata";
+import { HttpClientModule } from "@angular/common/http"; // import HTTP module 
+import { SlataModule } from "slata"; // import Slata module
+import { environment } from "./environment";  // import config
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    // Import here
-    //
-    SlataModule.forRoot(CONFIG),
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [
+        BrowserModule,
+        HttpClientModule, // added import here
+        SlataModule.forRoot(environment.slataConfig), // added import here
+    ],
+    providers: [],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}
-
 ```
 
-```python
-// CONFIG EXAMPLE
-//
-export const CONFIG {
-    backendType: 'LOCAL' | 'STAGING' | 'PRODUCTION',
-    projectToken: '************' 
-}
-```
-
-```python
-// If need to share module in another modules in project.
-// Don't forget about export
-//
+If you need to share module in another modules in project. Don't forget about export
+```ts
 imports: [
     BrowserModule,
-    // Import SlataModule
-    //
-    SlataModule.forRoot(CONFIG),
-  ],
-  exports: [SlataModule],
+    HttpClientModule,
+    SlataModule.forRoot(environment.slataConfig),
+  ], 
+exports: [HttpClientModule, SlataModule]
 ```
 
 ## Include
 
-```python
+```angular2html
 <lib-slata></lib-slata>
 ```
-> It is dropdown with available languages for project
+It is dropdown with available languages for project
 ## With @Input()
 > @Input **isIcon**: boolean
 
@@ -71,18 +75,16 @@ imports: [
 
 ## **Slata translation directive**
 
-```python
-// init our directive for any tag in html
-//
-<p libTranslationKey >Some text inside tag</p>
+Init our directive for any tag in html
+```angular2html
+<p libTranslationKey></p>
 ```
 
-```python
-// set translation key for each directive by @Input() fullKey
-//
+Set translation key for each directive by @Input() fullKey and @Input() defaultValue
+```angular2html
 <p libTranslationKey
-   [fullKey]="'header.navigation.home_page'">
-    Some text inside tag
+   [fullKey]="'header.navigation.home_page'"
+   [defaultValue]="'some text inside tag'">
 </p>
 ```
 *VALID\* separations is dots and underscore!!!*
@@ -91,7 +93,7 @@ imports: [
 
 ###EXAMPLE
 
-```python
+```ts
 const translations = {
     header: {
         title: {
@@ -102,17 +104,17 @@ const translations = {
         }
     }
 }
-
-
+```
+```angular2html
 <p libTranslationKey
-   [fullKey]="'header.navigation.home_page'">
-    text will be here
+   [fullKey]="'header.navigation.home_page'"
+   [defaultValue]="'text will be here'">
 </p>
 ```
 
 ## Slata Service
 
-```python
+```ts
 import { Component, OnInit } from "@angular/core";
 import { SlataService } from "slata"; // Import SlataService
 
@@ -128,10 +130,9 @@ export class AppComponent implements OnInit {
     console.log(this.translationMessage('header.navigation.home_page'))
   }
   
-  translationMessage(fullKey: string): string {
+  translationMessage(fullKey: string, defaultValue: string): string {
     // This method return STRING
-    //
-    return this.slataService.getTranslationByKey(fullKey)
+    return this.slataService.getTranslationByKey(fullKey, defaultValue);
   }
 }
 ```
