@@ -45,7 +45,7 @@ import { AppComponent } from "./app.component";
 
 import { HttpClientModule } from "@angular/common/http"; // import HTTP module 
 import { SlataModule } from "slata"; // import Slata module
-import { environment } from "./environment";  // import config
+import { environment } from "../environments/environment";  // import config
 
 @NgModule({
     declarations: [AppComponent],
